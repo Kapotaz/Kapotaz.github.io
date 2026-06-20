@@ -11,126 +11,7 @@
     <link rel="manifest" href="site.webmanifest">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500&family=Inter:wght@400;700&display=swap');
-
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            background: #050505;
-            color: #e0e0e0;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0.5;
-            pointer-events: none;
-            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
-            filter: blur(4px);
-            transform: scale(1.1);
-        }
-
-        .top-nav {
-            position: absolute;
-            top: 2.5rem;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 2.5rem;
-            z-index: 10;
-        }
-
-        .nav-link {
-            font-family: 'JetBrains Mono', monospace;
-            color: #a0a0a0;
-            text-decoration: none;
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-            transition: all 0.3s ease;
-            padding-bottom: 4px;
-            border-bottom: 1px solid transparent;
-        }
-
-        .nav-link:hover {
-            color: #3b82f6;
-            border-bottom: 1px solid #3b82f6;
-        }
-
-        .nav-link.active {
-            color: #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .card {
-            width: 90%;
-            max-width: 500px;
-            padding: 3rem;
-            background: transparent; 
-            border-radius: 12px;
-            text-align: left;
-            position: relative;
-        }
-
-        .tag {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: #3b82f6;
-            letter-spacing: 0.15em;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        h1 {
-            font-weight: 700;
-            font-size: 2.5rem;
-            margin: 0 0 1rem 0;
-            letter-spacing: -0.02em;
-        }
-
-        p {
-            font-size: 1rem;
-            line-height: 1.8;
-            color: #a0a0a0;
-            margin-bottom: 2rem;
-        }
-
-        .glow {
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%);
-            z-index: -1;
-        }
-
-        /* --- MOBILE RESPONSIVENESS --- */
-        @media (max-width: 600px) {
-            .card {
-                padding: 1.5rem;
-                width: 85%;
-            }
-            h1 {
-                font-size: 2rem;
-            }
-            p {
-                font-size: 0.95rem;
-            }
-            .top-nav {
-                top: 1.5rem;
-                gap: 1.5rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -139,14 +20,102 @@
         <a href="homelab.html" class="nav-link active">homelab</a>
     </nav>
 
-    <div class="card">
+    <div class="card homelab-card">
         <div class="glow"></div>
-        <span class="tag">INFRASTRUCTURE.V1</span>
+        
+        <div class="tag-container">
+            <span class="tag">INFRASTRUCTURE.V1</span>
+            <span class="tag date-tag" id="last-updated">UPDATED: // FETCHING...</span>
+        </div>
+        
         <h1>Homelab.</h1>
         
-        <p>[ Specifications awaiting deployment... ]</p>
-        
+        <p>Welcome to my homelab! This is my personal playground where I experiment with self-hosting, system administration, networking, and software development. It's constantly evolving, but here is a snapshot of my current setup.</p>
+
+        <h2>⚙️ The Hardware Fleet</h2>
+
+        <h3>Node 1: Homser (Primary Application Server)</h3>
+        <ul>
+            <li><strong>OS:</strong> Ubuntu 24.04.4 LTS (via CasaOS)</li>
+            <li><strong>CPU:</strong> Intel Core i3-1005G1 @ 1.20GHz (4 Cores)</li>
+            <li><strong>RAM:</strong> 8 GB DDR4</li>
+            <li><strong>Role:</strong> Core application, media streaming, and smart home automation hub.</li>
+        </ul>
+
+        <h3>Node 2: Pi Hole (Network Security)</h3>
+        <ul>
+            <li><strong>OS:</strong> Debian Linux</li>
+            <li><strong>CPU:</strong> Intel Atom N455 @ 1.66GHz (2 Cores)</li>
+            <li><strong>RAM:</strong> 2 GB</li>
+            <li><strong>Role:</strong> Network-wide ad-blocking and local DNS management.</li>
+        </ul>
+
+        <h3>Planned Nodes</h3>
+        <ul>
+            <li><strong>Raspberry Pi:</strong> Dedicated monitoring server.</li>
+            <li><strong>Dedicated NAS Storage:</strong> Multi-HDD array optimized for high-capacity photo and data backups.</li>
+        </ul>
+
+        <h2>🐳 Deployed Services</h2>
+        <p>I run bare-metal OS installations utilizing CasaOS as my primary management layer, allowing me to easily deploy and maintain containerized services via Docker.</p>
+
+        <h3>Management & Dashboards</h3>
+        <ul>
+            <li><strong>CasaOS:</strong> Cloud-management interface layer.</li>
+            <li><strong>Homepage:</strong> Sleek, unified landing page asset.</li>
+            <li><strong>Glances:</strong> Real-time system monitoring.</li>
+            <li><strong>Nginx:</strong> Reverse proxy handling traffic routing.</li>
+        </ul>
+
+        <h3>Media & Automation</h3>
+        <ul>
+            <li><strong>Jellyfin:</strong> Open-source media streaming server.</li>
+            <li><strong>Navidrome:</strong> High-performance music streaming server.</li>
+            <li><strong>Sonarr / Radarr / Prowlarr:</strong> Automated media acquisition stack.</li>
+        </ul>
+
+        <h3>Smart Home Hub</h3>
+        <ul>
+            <li><strong>Home Assistant:</strong> Centralized local smart home automation engine.</li>
+            <li><strong>ESPHome:</strong> Custom firmware management for ESP8266/ESP32 microcontrollers.</li>
+        </ul>
+
+        <h3>Cloud & Utilities</h3>
+        <ul>
+            <li><strong>Nextcloud:</strong> Private productivity cloud and initial file storage.</li>
+            <li><strong>Watch Your LAN:</strong> Network security scanner for tracking connected devices.</li>
+            <li><strong>UpSnap:</strong> Wake-on-LAN dashboard to remotely wake sleeping machines.</li>
+            <li><strong>Dockhand:</strong> Automated Docker container backup and maintenance tool.</li>
+        </ul>
+
+        <h2>🖧 Network Architecture</h2>
+        <ul>
+            <li><strong>Mesh VPN:</strong> My network is built around Tailscale. This allows me to seamlessly and securely access all my services (like CasaOS, Jellyfin, and Home Assistant) from anywhere in the world without exposing any ports to the public internet.</li>
+        </ul>
+
+        <h2>🚀 Future Plans / Roadmap</h2>
+        <p>A homelab is never truly finished. Here is what I am planning to tackle next:</p>
+        <ul style="list-style-type: none; padding-left: 0;">
+            <li><span class="mono-check">[ ]</span> Deploy a dedicated Raspberry Pi as an independent monitoring server (Uptime Kuma, Grafana, Prometheus).</li>
+            <li><span class="mono-check">[ ]</span> Purchase HDDs and build out a dedicated NAS for reliable, long-term storage.</li>
+            <li><span class="mono-check">[ ]</span> Set up Immich for self-hosted, automated photo backups.</li>
+        </ul>
+
     </div>
 
+    <script>
+        // Fetch the last modified date of the document
+        const dateObj = new Date(document.lastModified);
+        
+        // Format it to DD-MM-YYYY (en-GB defaults to day-month-year)
+        const formattedDate = dateObj.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        }).replace(/\//g, '-');
+        
+        // Inject into the HTML
+        document.getElementById('last-updated').innerText = `UPDATED: ${formattedDate}`;
+    </script>
 </body>
 </html>
