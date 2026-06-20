@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECURE // HOMELAB</title>
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500&family=Inter:wght@400;700&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #050505;
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.5;
+            pointer-events: none;
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+            filter: blur(4px);
+            transform: scale(1.1);
+        }
+
+        .top-nav {
+            position: absolute;
+            top: 2.5rem;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            z-index: 10;
+        }
+
+        .nav-link {
+            font-family: 'JetBrains Mono', monospace;
+            color: #a0a0a0;
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            padding-bottom: 4px;
+            border-bottom: 1px solid transparent;
+        }
+
+        .nav-link:hover {
+            color: #3b82f6;
+            border-bottom: 1px solid #3b82f6;
+        }
+
+        .nav-link.active {
+            color: #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .card {
+            width: 90%;
+            max-width: 500px;
+            padding: 3rem;
+            background: transparent; 
+            border-radius: 12px;
+            text-align: left;
+            position: relative;
+        }
+
+        .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: #3b82f6;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin: 0 0 1rem 0;
+            letter-spacing: -0.02em;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #a0a0a0;
+            margin-bottom: 2rem;
+        }
+
+        .glow {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%);
+            z-index: -1;
+        }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 600px) {
+            .card {
+                padding: 1.5rem;
+                width: 85%;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            p {
+                font-size: 0.95rem;
+            }
+            .top-nav {
+                top: 1.5rem;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="index.html" class="nav-link">~</a>
+        <a href="homelab.html" class="nav-link active">homelab</a>
+    </nav>
+
+    <div class="glow"></div>
+    <div class="card">
+        <span class="tag">INFRASTRUCTURE.V1</span>
+        <h1>Homelab.</h1>
+        
+        <p>[ Specifications awaiting deployment... ]</p>
+        
+    </div>
+
+</body>
+</html>
