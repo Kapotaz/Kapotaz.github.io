@@ -60,10 +60,11 @@ body.index-page {
     font-family: 'JetBrains Mono', monospace;
     color: #a0a0a0;
     text-decoration: none;
-    font-size: 0.85rem;
+    font-size: 1.15rem;
     letter-spacing: 0.05em;
     transition: all 0.3s ease;
-    padding-bottom: 4px;
+    /*padding-bottom: 4px;*/
+    padding: 0.3em 0.3em;
     border-bottom: 1px solid transparent;
 }
 
