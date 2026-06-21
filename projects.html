@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECURE // PROJECTS</title>
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="index.html" class="nav-link">~</a>
+        <a href="homelab.html" class="nav-link">homelab</a>
+        <a href="projects.html" class="nav-link active">projects</a>
+    </nav>
+
+    <div class="card homelab-card">
+        <div class="glow"></div>
+        
+        <div class="tag-container">
+            <span class="tag">DEV.ENVIRONMENT</span>
+        </div>
+        
+        <h1>Projects & Scripts.</h1>
+        
+        <p>A central repository for my custom applications, homelab automation scripts, and hardware development experiments.</p>
+
+        <h2>📦 Applications</h2>
+
+        <h3>Digital Wardrobe</h3>
+        <p>A web-based application featuring automated background removal for clothing photos. Designed for self-hosting and containerized deployment.</p>
+        <ul>
+            <li><strong>Deployment:</strong> CasaOS via Docker Stacks</li>
+            <li><strong>Status:</strong> Active Development</li>
+        </ul>
+        <a href="#" class="btn">[ View App Source ]</a>
+
+        <br><br><br>
+
+        <h2>🔌 Hardware</h2>
+
+        <h3>[ ESP32 / Arduino Project Title ]</h3>
+        <p>Project description goes here. Detail the custom wiring, specific microcontrollers used, and how it interacts with the physical environment.</p>
+        <ul>
+            <li><strong>Hardware:</strong> ESP32 / Microcontroller</li>
+            <li><strong>Role:</strong> Sensor node / Actuator</li>
+            <li><strong>Status:</strong> Prototyping</li>
+        </ul>
+        <a href="#" class="btn">[ View Schematics ]</a>
+
+        <br><br>
+
+        <h3>[ Home Automation Node ]</h3>
+        <p>Description of the smart home integration. Detail how it communicates with the central hub and what network protocols it utilizes.</p>
+        <ul>
+            <li><strong>Platform:</strong> Custom Firmware</li>
+            <li><strong>Protocol:</strong> MQTT / API</li>
+            <li><strong>Status:</strong> Testing</li>
+        </ul>
+        <a href="#" class="btn">[ View Details ]</a>
+
+        <br><br><br>
+
+        <h2>📜 Scripts</h2>
+
+        <h3>SSH Service Toggle</h3>
+        <p>A quick bash script to securely enable or disable the SSH daemon on Linux machines, minimizing the attack surface when remote access isn't required.</p>
+        <ul>
+            <li><strong>Environment:</strong> Linux / Bash</li>
+        </ul>
+        <button class="btn" onclick="openTerminal('ssh-toggle')">[ View Script ]</button>
+        <br><br>
+
+        <h3>System & Container Stats</h3>
+        <p>A monitoring utility that hooks into Docker and the host OS to pull real-time resource usage, container health, and uptime statistics.</p>
+        <ul>
+            <li><strong>Environment:</strong> Linux / Docker CLI</li>
+        </ul>
+        <button class="btn" onclick="openTerminal('stats-pull')">[ View Script ]</button>
+
+        <br><br>
+
+        <h3>Automated APT Updater</h3>
+        <p>A scheduled maintenance script to quietly handle package updates and upgrades, complete with logging and error reporting for Debian-based systems.</p>
+        <ul>
+            <li><strong>Environment:</strong> Debian/Ubuntu / Cron</li>
+        </ul>
+        <button class="btn" onclick="openTerminal('apt-update')">[ View Script ]</button>
+
+    </div>
+
+    <div class="modal-overlay" id="scriptModal" onclick="closeTerminal(event)">
+        <div class="terminal-window" onclick="event.stopPropagation()">
+            <div class="terminal-header">
+                <span id="terminal-title">user@homser:~/scripts</span>
+                <div class="terminal-actions">
+                    <button class="terminal-btn" id="demoBtn" onclick="runDemo()">[ Run Demo ]</button>
+                    <button class="terminal-btn" onclick="copyCode()">[ Copy ]</button>
+                    <button class="terminal-btn" onclick="closeTerminal()">[ Close ]</button>
+                </div>
+            </div>
+            <div class="terminal-body">
+                <pre><code id="terminal-code"></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('scriptModal');
+        const codeBlock = document.getElementById('terminal-code');
+        const titleBlock = document.getElementById('terminal-title');
+        const demoBtn = document.getElementById('demoBtn');
+
+        // Store the demo data for each script
+        const demoDatabase = {
+            'ssh-toggle': `> sudo ./ssh_toggle.sh\n[*] SSH is active. Shutting down service listeners...\n[!] Forcefully killing ALL network connections on port 22...\n[+] All connections severed successfully.\n\n[*] Window will close automatically in 5 seconds...\n> _`,
+            'stats-pull': `> ./stats_pull.sh\n--- CPU ---\nLoad:  0.15, 0.08, 0.02\n--- TEMP ---\n42°C\n--- UPTIME ---\n12d, 4h, 25m\n--- RAM ---\n2.1G / 7.8G\n--- DISK ---\n25G / 100G (26%)\n--- APPS ---\nhomser-nextcloud: Online\nhomser-jellyfin: Online\nhomser-homeassistant: Online\n> _`,
+            'apt-update': `> sudo ./apt_update.sh\n🚀 Starting safe server update...\n🔄 Fetching the latest package lists...\n📦 Installing updates...\n🧹 Cleaning up old packages...\n✨ Update process finished successfully!\n✅ No reboot required. Your CasaOS server is up to date!\n> _`
+        };
+
+        let originalCode = "";
+        let activeScriptID = "";
+
+        async function openTerminal(fileName) {
+            activeScriptID = fileName;
+            
+            // 1. Lock scrolling
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+            
+            // 2. Open modal & Reset UI state
+            titleBlock.innerText = `root@homser:~/scripts/${fileName}.sh`;
+            codeBlock.innerText = "Loading script from server...";
+            demoBtn.innerText = "[ Run Demo ]";
+            demoBtn.onclick = runDemo;
+            modal.classList.add('active');
+
+            // 3. Fetch the actual .sh file
+            try {
+                const response = await fetch(`scripts/${fileName}.sh`);
+                if (!response.ok) throw new Error('Script file not found.');
+                
+                originalCode = await response.text();
+                codeBlock.innerText = originalCode;
+                if (typeof Prism !== 'undefined') {
+                    Prism.highlightElement(codeBlock);
+                }
+            } catch (error) {
+                codeBlock.innerText = `[ ERROR ]: ${error.message}`;
+            }
+        }
+
+        function runDemo() {
+            codeBlock.innerText = demoDatabase[activeScriptID];
+            demoBtn.innerText = "[ Reset ]";
+            demoBtn.onclick = resetTerminal;
+            Prism.highlightElement(codeBlock);
+        }
+
+        function resetTerminal() {
+            codeBlock.innerText = originalCode;
+            demoBtn.innerText = "[ Run Demo ]";
+            demoBtn.onclick = runDemo;
+            if (typeof Prism !== 'undefined') {
+                Prism.highlightElement(codeBlock);
+            }        }
+
+        function closeTerminal(e) {
+            if (!e || e.target === modal || e.target.innerText === "[ Close ]") {
+                modal.classList.remove('active');
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
+            }
+        }
+
+        function copyCode() {
+            navigator.clipboard.writeText(codeBlock.innerText).then(() => {
+                const copyBtn = document.querySelectorAll('.terminal-btn')[0];
+                const originalText = copyBtn.innerText;
+                copyBtn.innerText = "[ Copied! ]";
+                setTimeout(() => copyBtn.innerText = originalText, 2000);
+            });
+        }
+    </script>
+
+</body>
+</html>

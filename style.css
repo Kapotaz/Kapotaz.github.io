@@ -234,3 +234,87 @@ strong {
         gap: 1.5rem;
     }
 }
+
+/* --- TERMINAL MODAL OVERLAY (STABLE) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(5, 5, 5, 0.95); /* Solid dark tint instead of blur */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out; /* Pure fade, no sliding */
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.terminal-window {
+    width: 90%;
+    max-width: 800px;
+    background: #0a0a0a;
+    border: 1px solid #3b82f6;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+    overflow: hidden;
+    /* Removed all transforms to stop the jitter */
+}
+
+.terminal-header {
+    background: rgba(59, 130, 246, 0.1);
+    border-bottom: 1px solid #3b82f6;
+    padding: 0.8rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: #a0a0a0;
+}
+
+.terminal-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.terminal-btn {
+    background: transparent;
+    border: none;
+    color: #3b82f6;
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.terminal-btn:hover {
+    color: #e0e0e0;
+}
+
+.terminal-body {
+    padding: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.terminal-body pre {
+    margin: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #e0e0e0;
+    white-space: pre-wrap;
+}
+
+/* Modal Scrollbar Styling */
+.terminal-body::-webkit-scrollbar {
+    width: 8px;
+}
+.terminal-body::-webkit-scrollbar-thumb {
+    background: #3b82f6;
+    border-radius: 4px;
+}
