@@ -26,21 +26,99 @@
         <span class="tag">SECURITY_ENGINEER.V1</span>
         <h1>Defensive Architecture.</h1>
         <p>Focused on adversarial simulation and red teaming. Specializing in vulnerability research, exploit development, and identifying critical weaknesses in enterprise-grade software before they are weaponized.</p>
-        <button class="btn" id="ipBtn" onclick="getIP()">[ TEST ME ]</button>
+        
+        <button class="btn" onclick="startRecon()">[ INITIATE SCAN ]</button>
+    </div>
+
+    <div class="modal-overlay" id="reconModal" onclick="closeRecon(event)">
+        <div class="terminal-window" onclick="event.stopPropagation()">
+            <div class="terminal-header">
+                <span id="recon-title">recon@defensive-arch:~$ scan_target --aggressive</span>
+                <div class="terminal-actions">
+                    <button class="terminal-btn" onclick="closeRecon()">[ Abort ]</button>
+                </div>
+            </div>
+            <div class="terminal-body">
+                <pre><code id="recon-code"></code></pre>
+            </div>
+        </div>
     </div>
 
     <script>
-        async function getIP() {
-            const btn = document.getElementById('ipBtn');
-            btn.innerText = "FETCHING...";
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+        async function startRecon() {
+            const modal = document.getElementById('reconModal');
+            const codeBlock = document.getElementById('recon-code');
+            
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+            
+            codeBlock.innerText = "";
+            modal.classList.add('active');
+
+            const appendLine = async (text, delay = 500) => {
+                codeBlock.innerText += text + "\n";
+                codeBlock.scrollTop = codeBlock.scrollHeight; 
+                await sleep(delay);
+            };
+
+            await appendLine("[*] INITIALIZING ACTIVE RECONNAISSANCE...", 800);
+            await appendLine("[*] Establishing secure socket layer...", 500);
+            
+            let ipData = { ip: "UNKNOWN", org: "UNKNOWN", city: "UNKNOWN", asn: "UNKNOWN" };
             try {
-                const response = await fetch('https://api.ipify.org?format=json');
-                const data = await response.json();
-                btn.innerText = data.ip;
-            } catch (err) {
-                btn.innerText = "ERROR";
+                const response = await fetch('https://ipapi.co/json/');
+                ipData = await response.json();
+            } catch (e) {
+                ipData.ip = "CONNECTION_FAILED";
+            }
+
+            await appendLine(`[+] Target Locked: ${ipData.ip}`, 800);
+            await appendLine("[*] Running geo-location and ASN routing analysis...", 1200);
+            await appendLine(`    - ISP / ORG : ${ipData.org || 'REDACTED'}`, 200);
+            await appendLine(`    - ASN       : ${ipData.asn || 'REDACTED'}`, 200);
+            await appendLine(`    - LOCATION  : ${ipData.city || 'UNKNOWN'}, ${ipData.country_name || 'UNKNOWN'}`, 1000);
+
+            await appendLine("[*] Extracting client browser fingerprint...", 900);
+            await appendLine(`    - USER-AGENT: ${navigator.userAgent}`, 1200);
+
+            await appendLine("[*] Probing external attack surface (simulated)...", 1500);
+            await appendLine("    - Port 22  (SSH)   : FILTERED", 400);
+            await appendLine("    - Port 80  (HTTP)  : CLOSED", 400);
+            await appendLine("    - Port 443 (HTTPS) : OPEN", 800);
+
+            await appendLine("[*] Analyzing security headers & TLS layer...", 1200);
+            await appendLine("    - CIPHER : TLS_AES_256_GCM_SHA384", 200);
+            await appendLine("    - HSTS   : ENFORCED", 200);
+            await appendLine("    - X-FRAME: DENY", 1000);
+
+            await appendLine("[!] RECON COMPLETE. SESSION LOGGED.", 0);
+        }
+
+        function closeRecon(e) {
+            const modal = document.getElementById('reconModal');
+            if (!e || e.target === modal || e.target.innerText === "[ Abort ]") {
+                modal.classList.remove('active');
+                
+                // Unlock the background scrolling
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
             }
         }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeRecon();
+            }
+        });
     </script>
+    <footer class="site-footer">
+        <a href="https://github.com/Kapotaz/Kapotaz.github.io" target="_blank" rel="noopener noreferrer" class="github-link">
+            <svg viewBox="0 0 24 24" class="github-icon" width="18" height="18">
+                <path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+            Kapotaz
+        </a>
+    </footer>
 </body>
 </html>

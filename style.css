@@ -13,7 +13,8 @@ body, html {
     color: #e0e0e0;
     font-family: 'Inter', sans-serif;
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center;    /* Center them horizontally */
     overflow-x: hidden;
 }
 
@@ -39,7 +40,7 @@ body::before {
 
 /* Specific layout for the locked landing page */
 body.index-page {
-    align-items: center;
+    justify-content: center; /* Center vertically ONLY on the index page */
     overflow: hidden;
     height: 100vh;
 }
@@ -233,6 +234,39 @@ strong {
         top: 1.5rem;
         gap: 1.5rem;
     }
+
+    /* --- TERMINAL MOBILE FIXES --- */
+    .terminal-window {
+        width: 95%; /* Use more screen real estate on mobile */
+    }
+    .terminal-header {
+        /* Stack the title on top and the buttons on the bottom */
+        flex-direction: column; 
+        align-items: flex-start;
+        gap: 0.8rem;
+    }
+    .terminal-header span {
+        font-size: 0.75rem;
+        /* Allow the long terminal path to break naturally instead of pushing the layout */
+        word-break: break-all; 
+    }
+    .terminal-actions {
+        width: 100%;
+        /* Align the buttons to the right side of the stacked header */
+        justify-content: flex-end; 
+    }
+    .terminal-btn {
+        /* CRITICAL: This forces the text to never split onto two lines */
+        white-space: nowrap; 
+        font-size: 0.95rem; 
+    }
+    .terminal-body {
+        padding: 1rem;
+    }
+    .terminal-body pre {
+        /* Scale down the terminal output slightly so it fits better horizontally */
+        font-size: 0.75rem; 
+    }
 }
 
 /* --- TERMINAL MODAL OVERLAY (STABLE) --- */
@@ -308,6 +342,7 @@ strong {
     line-height: 1.5;
     color: #e0e0e0;
     white-space: pre-wrap;
+    word-break: break-all;
 }
 
 /* Modal Scrollbar Styling */
@@ -317,4 +352,104 @@ strong {
 .terminal-body::-webkit-scrollbar-thumb {
     background: #3b82f6;
     border-radius: 4px;
+}
+
+/* --- PRISM OVERRIDES --- */
+pre[class*="language-"] {
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+}
+
+code[class*="language-"] {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.9rem !important;
+    line-height: 1.6 !important;
+}
+/* --- SCROLL TO TOP WIDGET --- */
+.scroll-top-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    background: rgba(5, 5, 5, 0.85); /* Matches your terminal modal tint */
+    border: 1px solid #3b82f6;
+    color: #3b82f6;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    z-index: 90; /* Sits just below your modal overlays */
+    border-radius: 4px;
+    
+    /* Hidden state */
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(15px);
+    transition: all 0.3s ease;
+}
+
+/* Visible state triggered by JavaScript */
+.scroll-top-btn.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+@media (hover: hover) {
+    .scroll-top-btn:hover {
+        background: #3b82f6;
+        color: #050505;
+    }
+}
+
+.scroll-top-btn:active {
+    background: #3b82f6 !important;
+    color: #050505 !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+    .scroll-top-btn {
+        bottom: 1.5rem;
+        right: 1.5rem;
+        padding: 0.5rem 0.8rem;
+    }
+}
+/* --- FOOTER --- */
+.site-footer {
+    width: 100%;
+    text-align: center;
+    padding: 2rem 0 1.5rem 0;
+    margin-top: auto; /* Pushes the footer to the absolute bottom of the screen */
+    z-index: 10;
+}
+body.index-page .site-footer {
+    position: absolute;
+    bottom: 0;
+    margin-top: 0;
+}
+
+.github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6a6a6a;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.github-link:hover {
+    color: #3b82f6;
+}
+
+.github-icon {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.github-link:hover .github-icon {
+    opacity: 1;
 }
