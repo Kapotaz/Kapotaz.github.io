@@ -121,8 +121,7 @@
         const demoDatabase = {
             'ssh-toggle': `> sudo ./ssh_toggle.sh\n[*] SSH is active. Shutting down service listeners...\n[!] Forcefully killing ALL network connections on port 22...\n[+] All connections severed successfully.\n\n[*] Window will close automatically in 5 seconds...\n> _`,
             'stats-pull': `> ./stats_pull.sh\n--- CPU ---\nLoad:  0.15, 0.08, 0.02\n--- TEMP ---\n42°C\n--- UPTIME ---\n12d, 4h, 25m\n--- RAM ---\n2.1G / 7.8G\n--- DISK ---\n25G / 100G (26%)\n--- APPS ---\nhomser-nextcloud: Online\nhomser-jellyfin: Online\nhomser-homeassistant: Online\n> _`,
-            'apt-update': `> sudo ./apt_update.sh\n🚀 Starting safe server update...\n🔄 Fetching the latest package lists...\n📦 Installing updates...\n🧹 Cleaning up old packages...\n✨ Update process finished successfully!\n✅ No reboot required. Your CasaOS server is up to date!\n> _`
-        };
+            'apt-update': `> sudo ./apt_update.sh\n[ * ] INITIATING SYSTEM UPDATE...\n[ * ] Fetching latest package lists...\n[ * ] Installing package upgrades (non-interactive)...\n[ * ] Removing orphaned dependencies and clearing cache...\n[ + ] Update process completed successfully.\n[ + ] No reboot required. System is fully up to date.\n> _`        };
 
         let originalCode = "";
         let activeScriptID = "";

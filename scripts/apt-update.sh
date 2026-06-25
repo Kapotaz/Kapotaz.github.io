@@ -1,36 +1,73 @@
 #!/bin/bash
 
+# ==============================================================================
+# Script Name: apt_update.sh
+# Description: Automated, non-interactive system update and cleanup utility.
+# Environment: Debian/Ubuntu (CasaOS)
+# ==============================================================================
+
+# --- Configuration ---
+LOG_FILE="/var/log/sys_update.log"
+TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
+
+# --- Logging Function ---
+# This ensures all output goes to the terminal AND a permanent log file
+log() {
+    local prefix="$1"
+    local message="$2"
+    
+    # Print to terminal
+    echo -e "${prefix} ${message}"
+    
+    # Append to log file with a timestamp
+    echo "[${TIMESTAMP}] ${prefix} ${message}" >> "$LOG_FILE"
+}
+
+# --- Error Handling ---
+# Catch unexpected command failures and log them before exiting
+handle_error() {
+    log "[ ERROR ]" "A command failed during execution. Check $LOG_FILE for details."
+    exit 1
+}
+trap 'handle_error' ERR
+
 # Exit immediately if any command fails
 set -e
 
-# Check if the script is run as root (sudo)
+# --- Pre-Flight Checks ---
 if [ "$EUID" -ne 0 ]; then
-  echo "❌ Error: Please run this script with sudo (e.g., sudo ./update_server.sh)."
-  exit 1
+    echo "[ ERROR ] Please run this script with sudo (e.g., sudo ./apt_update.sh)."
+    exit 1
 fi
 
-echo "🚀 Starting safe server update..."
+# ==============================================================================
+# Execution
+# ==============================================================================
+
+log "[ * ]" "INITIATING SYSTEM UPDATE..."
 
 # 1. Update package lists
-echo "🔄 Fetching the latest package lists..."
-apt update
+# Using apt-get -qq (quiet) is preferred for scripts over standard 'apt'
+log "[ * ]" "Fetching latest package lists..."
+apt-get update -qq
 
 # 2. Upgrade packages 
-# (DEBIAN_FRONTEND=noninteractive prevents the script from getting stuck on config prompts)
-echo "📦 Installing updates..."
-DEBIAN_FRONTEND=noninteractive apt upgrade -y
+log "[ * ]" "Installing package upgrades (non-interactive)..."
+DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -qq
 
 # 3. Clean up unused dependencies
-echo "🧹 Cleaning up old packages..."
-apt autoremove -y
-apt clean
+log "[ * ]" "Removing orphaned dependencies and clearing cache..."
+apt-get autoremove -y -qq
+apt-get clean
 
-echo "✨ Update process finished successfully!"
+log "[ + ]" "Update process completed successfully."
 
 # 4. Safely check if a reboot is required
 if [ -f /var/run/reboot-required ]; then
-  echo "⚠️  NOTE: A system reboot is required to apply kernel or core updates."
-  echo "    Please run 'sudo reboot' at your earliest convenience."
+    log "[ ! ]" "SYSTEM REBOOT REQUIRED to apply kernel or core updates."
+    log "[ ! ]" "Run 'sudo reboot' at your earliest convenience."
 else
-  echo "✅ No reboot required. Your CasaOS server is up to date!"
+    log "[ + ]" "No reboot required. System is fully up to date."
 fi
+
+exit 0
